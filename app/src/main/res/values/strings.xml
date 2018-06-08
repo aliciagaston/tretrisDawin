@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Tetris</string>
+    <string name="left"><![CDATA[<]]></string>
+    <string name="down">v</string>
+    <string name="right"><![CDATA[>]]></string>
+    <string name="rotate">rotate</string>
+</resources>
