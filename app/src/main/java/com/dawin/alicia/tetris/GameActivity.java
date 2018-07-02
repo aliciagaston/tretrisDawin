@@ -21,21 +21,16 @@ public class GameActivity extends Activity implements View.OnClickListener {
     public int[][] matrixMain;
     public Piece current;
     public GridAdapter gridApdater;
+    private boolean pause;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        Button onright = findViewById(R.id.right_button);
-        onright.setOnClickListener(this);
-        Button onleft = findViewById(R.id.left_button);
-        onleft.setOnClickListener(this);
-        Button ondown = findViewById(R.id.down_button);
-        ondown.setOnClickListener(this);
-        Button onrotate = findViewById(R.id.rotate_button);
-        onrotate.setOnClickListener(this);
-
+        this.pause = false;
+        
+        this.initButton();
         this.initBitmap();
         this.initGrid();
 
@@ -56,6 +51,17 @@ public class GameActivity extends Activity implements View.OnClickListener {
 
         handler.postDelayed(run, 1000);
 
+    }
+
+    public void initButton(){
+        Button onright = findViewById(R.id.right_button);
+        onright.setOnClickListener(this);
+        Button onleft = findViewById(R.id.left_button);
+        onleft.setOnClickListener(this);
+        Button ondown = findViewById(R.id.down_button);
+        ondown.setOnClickListener(this);
+        Button onrotate = findViewById(R.id.rotate_button);
+        onrotate.setOnClickListener(this);
     }
 
     public void initBitmap(){
@@ -162,18 +168,21 @@ public class GameActivity extends Activity implements View.OnClickListener {
     }
 
     public void loop() {
-        if(this.current.canMove(this.matrixMain, "down")){
-            this.erasePiece();
-            this.current.down();
-            this.addPieceToMatrix();
-            this.matrixToBitmap();
+        if(!this.pause){
+            if(this.current.canMove(this.matrixMain, "down")){
+                this.erasePiece();
+                this.current.down();
+                this.addPieceToMatrix();
+                this.matrixToBitmap();
+            }
+            else {
+                this.current = this.randomPiece();
+                this.addPieceToMatrix();
+                this.matrixToBitmap();
+                this.eraseLine();
+            }
         }
-        else {
-            this.current = this.randomPiece();
-            this.addPieceToMatrix();
-            this.matrixToBitmap();
-            this.eraseLine();
-        }
+
         gridApdater.notifyDataSetChanged();
 
     }
@@ -188,6 +197,7 @@ public class GameActivity extends Activity implements View.OnClickListener {
 
             }
             if(completeLine){
+                this.pause = true;
                 Context context = getApplicationContext();
                 CharSequence text;
                 int duration = Toast.LENGTH_SHORT;
@@ -222,6 +232,7 @@ public class GameActivity extends Activity implements View.OnClickListener {
             gridApdater.notifyDataSetChanged();
         }
         gridApdater.notifyDataSetChanged();
+        this.pause=false;
     }
 
     @Override
