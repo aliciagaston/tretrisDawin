@@ -33,12 +33,12 @@ public class T extends Piece implements Movement, PossibleMovement{
 
     @Override
     public void left() {
-
+        this.pos_j = this.pos_j-1;
     }
 
     @Override
     public void right() {
-
+        this.pos_j = this.pos_j+1;
     }
 
     @Override

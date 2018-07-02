@@ -1,5 +1,8 @@
 package com.dawin.alicia.tetris;
 
+import android.content.Context;
+import android.widget.Toast;
+
 public abstract class Piece implements Movement, PossibleMovement {
     protected int height;
     protected int width;
@@ -16,6 +19,7 @@ public abstract class Piece implements Movement, PossibleMovement {
         this.pos_j = pos_j;
         this.color = color;
     }
+
 
     @Override
     public boolean canMove(int[][] matrixMain, String direction) {
@@ -38,10 +42,43 @@ public abstract class Piece implements Movement, PossibleMovement {
                     }
                     return true;
                 }
+            case "right":
+                int pos_j_after = this.pos_j+1;
+                int matrixWidth = 10;
+                if((pos_j_after + this.width-1)>=matrixWidth){
+                    return false;
+                }
+                else {
+                    int c = this.pos_j + (this.width -1);
+                    for (int l = this.pos_i; l < (this.pos_i + this.height); l++) {
+                        if (matrixMain[l][c] == 1) {
+                            if (matrixMain[l][c + 1] == 1) {
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                }
+            case "left" :
+                pos_j_after = this.pos_j-1;
+                if(pos_j_after<0){
+                    return false;
+                }
+                else {
+                    int c = this.pos_j;
+                    for(int l = this.pos_i; l< (this.pos_i + this.height); l++){
+                        if(matrixMain[l][c]==1){
+                            if(matrixMain[l][c-1] == 1) {
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                }
+            case "rotate":
 
 
         }
-
         return false;
     }
 }
